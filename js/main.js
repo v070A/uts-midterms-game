@@ -56,20 +56,32 @@ function playSound(type) {
 }
 
 // --- TYPEWRITER WITH LOCK ---
+// --- TYPEWRITER WITH LOCK & AUTO-SCROLL ---
 let isTyping = false; 
-let typewriterTimeout = null; // Added to prevent overlaps if closed early
+let typewriterTimeout = null; 
 
 function runTypewriter(text, elementId) {
     isTyping = true; 
-    if (typewriterTimeout) clearTimeout(typewriterTimeout); // Reset any existing typers
+    if (typewriterTimeout) clearTimeout(typewriterTimeout); 
     const el = document.getElementById(elementId);
     if (!el) { isTyping = false; return; }
+
+    // Grab the scrollable container
+    const gamePanel = document.getElementById('gamePanel');
+
     el.innerHTML = '';
     let i = 0;
     function type() {
         if (i < text.length) {
             el.innerHTML += text.charAt(i);
-            // Added a check so it doesn't play sound on \n line breaks!
+
+            // --- AUTO SCROLL MAGIC HERE ---
+            // This forces the panel to scroll to the very bottom on every letter
+            if (gamePanel) {
+                gamePanel.scrollTop = gamePanel.scrollHeight;
+            }
+            // -----------------------------
+
             if (text.charAt(i) !== ' ' && text.charAt(i) !== '.' && text.charAt(i) !== ',' && text.charAt(i) !== '\n') {
                 playSound('text');
             }
