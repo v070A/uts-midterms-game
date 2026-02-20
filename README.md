@@ -8,7 +8,7 @@ an interactive 3D web experience created for my UTS midterms, exploring physical
 - **Assets:** Custom 3D models made in Blender (mixed with some open-source resources)
 
 ## 🚀 how to play
-you can play the game live right here in your browser: **[INSERT YOUR GITHUB PAGES LINK HERE]**
+you can play the game live right here in your browser: **[https://v070a.github.io/uts-midterms-game/]**
 
 ## 💻 running it locally
 because this project uses ES modules for Three.js, simply double-clicking the `index.html` file won't work due to CORS restrictions. you need to host it on a local web server.
