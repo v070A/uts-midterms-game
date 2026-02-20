@@ -1,4 +1,4 @@
-# shan's metamorphosis 🐛🦋
+# paruparu game 🐛🦋
 
 an interactive 3D web experience created for my UTS midterms, exploring physical/sexual self and the journey to self-acceptance through the eyes of a very hungry caterpillar named shan. 
 
