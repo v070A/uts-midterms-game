@@ -1,0 +1,356 @@
+body { margin: 0; overflow: hidden; background-color: #9CD5FF; }
+
+#gamePanel {
+    position: absolute; top: 0; left: 0; width: 460px; height: 100%;
+    background-color: #fffef0; background-image: 
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E"),
+        linear-gradient(#add8e6 1px, transparent 1px), linear-gradient(90deg, #add8e6 1px, transparent 1px);
+    background-size: auto, 25px 25px; border-right: 12px solid #B45253; 
+    box-shadow: 10px 0 15px rgba(0,0,0,0.1); color: #2c3e50;
+    font-family: 'Patrick Hand', cursive; font-size: 22px; padding: 40px;
+    box-sizing: border-box; z-index: 10; overflow-y: auto; overflow-x: visible; pointer-events: auto;
+}
+
+#settingsBtn {
+    display: none; position: absolute; top: 20px; right: 25px;
+    font-size: 30px; cursor: pointer; background: none; border: none;
+    color: #B45253; transition: transform 0.2s; z-index: 20;
+}
+#settingsBtn:hover { transform: rotate(90deg); }
+
+#mascotRow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    position: relative;
+}
+.mascot-container {
+    width: 130px; height: 130px; min-width: 130px; min-height: 130px;
+    background-color: #FFE797; border-radius: 50%;
+    flex-shrink: 0;
+    border: 5px dashed #FCB53B; display: flex;
+    align-items: center; justify-content: center; overflow: hidden;
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.1); transform: rotate(-3deg);
+    position: relative; z-index: 2;
+}
+.mascot-container img { width: 100%; height: 100%; object-fit: cover; }
+h1 { font-family: 'Patrick Hand', cursive; font-size: 42px; text-align: center; color: #B45253; margin-top: 0; margin-bottom: 5px; font-weight: bold; }
+
+#subHeaderText {
+    font-size: 20px; text-align: center; color: #84994F; margin-bottom: 30px;
+    font-weight: bold; border-bottom: 2px solid #84994F; display: block;
+    margin-left: auto; margin-right: auto; width: fit-content; padding-bottom: 5px;
+}
+
+.section { margin-bottom: 20px; padding: 10px; }
+.section-title { font-family: 'Patrick Hand', cursive; color: #FCB53B; font-weight: bold; font-size: 28px; margin-bottom: 10px; text-transform: uppercase; text-decoration: underline wavy #B45253; min-height: 35px;}
+p, li { font-size: 22px; line-height: 1.4; color: #333; margin: 0 0 10px 0; }
+ul { padding-left: 10px; list-style: none; }
+li::before { content: '➤'; color: #84994F; margin-right: 8px; }
+
+.ready-section { text-align: center; margin-top: 40px; border-top: 2px dashed #add8e6; padding-top: 20px; }
+.ready-text { font-family: 'Patrick Hand', cursive; font-size: 24px; color: #2c3e50; margin-bottom: 15px; font-weight: bold; }
+
+.action-btn { background-color: #fffef0; color: #B45253; font-family: 'Patrick Hand', cursive; font-size: 28px; font-weight: bold; padding: 10px 50px; border: 3px solid #2c3e50; border-radius: 12px; cursor: pointer; box-shadow: 4px 4px 0 rgba(0,0,0,0.2); transition: transform 0.1s, box-shadow 0.1s, background-color 0.1s; }
+.action-btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 rgba(0,0,0,0.2); background-color: #fff; }
+.action-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 rgba(0,0,0,0.2); background-color: #f0f0f0; }
+#resumeBtn { display: none; }
+
+.hidden-panel { display: none !important; }
+.active-panel { display: block !important; }
+
+.fade-slide-enter { opacity: 0; transform: translateY(15px); transition: all 0.4s ease; }
+.fade-slide-active { opacity: 1; transform: translateY(0); }
+
+.story-text { font-size: 26px; color: #333; font-style: normal; line-height: 1.4; white-space: pre-wrap; }
+
+/* --- TRACKER HUD --- */
+#trackerPanel {
+    position: absolute; top: 20px; right: 20px;
+    background-color: #fffef0; border: 4px dashed #FCB53B; border-radius: 15px;
+    padding: 15px 25px; font-family: 'Patrick Hand', cursive; font-size: 24px;
+    color: #2c3e50; box-shadow: 5px 5px 0 rgba(0,0,0,0.15);
+    display: none; z-index: 10; transform: rotate(2deg);
+}
+.tracker-title { font-weight: bold; color: #B45253; border-bottom: 2px solid #add8e6; margin-bottom: 10px; text-align: center; }
+.tracker-item { margin: 8px 0; color: #555; transition: all 0.3s; }
+.tracker-item.found { color: #84994F; text-decoration: line-through; font-weight: bold; transform: scale(1.05); }
+.tracker-item.found .check::after { content: ' ✔'; color: #84994F; }
+
+/* --- RESET CAMERA BUTTON --- */
+#resetCamBtn {
+    position: absolute; bottom: 20px; right: 20px;
+    background-color: #B45253; color: #fffef0;
+    font-family: 'Patrick Hand', cursive; font-size: 22px; font-weight: bold;
+    border: 3px solid #2c3e50; border-radius: 10px;
+    padding: 10px 20px; cursor: pointer; display: none; z-index: 20;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.2); transition: transform 0.1s, box-shadow 0.1s;
+}
+#resetCamBtn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 rgba(0,0,0,0.2); }
+#resetCamBtn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 rgba(0,0,0,0.2); }
+
+#hoverLabel { 
+    position: absolute; display: none; background-color: #fffef0; color: #B45253; 
+    padding: 10px 20px; border-radius: 5px; font-family: 'Patrick Hand', cursive; 
+    font-size: 20px; font-weight: bold; pointer-events: none; 
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.2); transform: translate(20px, 20px); 
+    border: 2px solid #2c3e50; z-index: 100; 
+}
+#loading { position: absolute; bottom: 20px; right: 20px; color: #556b8d; font-family: 'Permanent Marker', cursive; font-size: 24px; z-index: 5; }
+
+/* --- SHAN DIALOGUE BOX (speech bubble bursting out right of panel) --- */
+#shanDialogue {
+    position: fixed;
+    left: 390px;
+    top: 95px;
+    background-color: #fffef0;
+    border: 3px solid #2c3e50;
+    border-radius: 14px;
+    padding: 14px 20px 14px 20px;
+    font-family: 'Patrick Hand', cursive;
+    font-size: 19px;
+    color: #333;
+    width: 220px;
+    box-shadow: 5px 5px 0 rgba(0,0,0,0.18);
+    display: none;
+    opacity: 0;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    transform: scale(0.88) translateX(-8px);
+    line-height: 1.45;
+    pointer-events: auto;
+    z-index: 50;
+}
+#shanDialogue.visible {
+    display: block;
+    opacity: 1;
+    transform: scale(1) translateX(0px);
+}
+/* Speech bubble tail pointing LEFT toward the circle */
+#shanDialogue::before {
+    content: '';
+    position: absolute;
+    left: -17px;
+    top: 36px;
+    border-width: 12px 17px 12px 0;
+    border-style: solid;
+    border-color: transparent #2c3e50 transparent transparent;
+}
+#shanDialogue::after {
+    content: '';
+    position: absolute;
+    left: -12px;
+    top: 38px;
+    border-width: 10px 14px 10px 0;
+    border-style: solid;
+    border-color: transparent #fffef0 transparent transparent;
+    z-index: 1;
+}
+.shan-name {
+    color: #9CD5FF;
+    font-weight: bold;
+    font-size: 20px;
+    margin-right: 3px;
+    display: block;
+    margin-bottom: 2px;
+}
+#shanDialogueText {
+    display: inline;
+}
+#shanDialogueClose {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    color: #B45253;
+    background: none;
+    border: none;
+    font-family: 'Patrick Hand', cursive;
+    font-weight: bold;
+    line-height: 1;
+    pointer-events: auto;
+}
+#shanDialogueClose:hover { color: #333; }
+
+/* --- CONGRATS PANEL --- */
+#congratsOverlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.65); /* Dim background */
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+#congratsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    max-width: 550px;
+    position: relative;
+}
+.congrats-top-img {
+    width: 95%;
+    height: 220px;
+    object-fit: cover;
+    border: 2px solid #8b5cf6; /* Thin purple border */
+    background-color: #e0f2fe; 
+    z-index: 1;
+    margin-bottom: -15px; /* Overlap the bottom board slightly */
+}
+.congrats-bottom-board {
+    background-color: #fdfaf0;
+    border: 8px solid #f97316; /* Thick orange border */
+    border-radius: 40px 20px 50px 30px / 20px 40px 30px 50px; /* Wobbly blob shape */
+    padding: 40px 20px;
+    text-align: center;
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 2;
+}
+.congrats-paperclip {
+    position: absolute;
+    top: -25px;
+    right: 15%;
+    width: 20px;
+    height: 50px;
+    border: 5px solid #eab308; /* Yellow */
+    border-radius: 12px;
+    z-index: 3;
+    transform: rotate(-5deg);
+}
+.congrats-bottom-board .star {
+    position: absolute;
+    font-size: 55px;
+    line-height: 1;
+    font-family: sans-serif;
+    pointer-events: none;
+}
+.congrats-bottom-board .star.green { 
+    color: #059669; bottom: -15px; left: -10px; transform: rotate(-15deg); 
+}
+.congrats-bottom-board .star.pink { 
+    color: #ec4899; top: 40%; right: -25px; transform: rotate(15deg); 
+}
+.congrats-title {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 42px;
+    color: #B45253;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+.congrats-subtext {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 24px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+#goodbyeBtn {
+    background-color: #B45253; color: #fffef0;
+    font-family: 'Patrick Hand', cursive; font-size: 28px; font-weight: bold;
+    border: 3px solid #2c3e50; border-radius: 12px;
+    padding: 10px 50px; cursor: pointer;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.2);
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+#goodbyeBtn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 rgba(0,0,0,0.2); }
+#goodbyeBtn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 rgba(0,0,0,0.2); }
+
+/* --- MAIN MENU OVERLAY --- */
+#mainMenuOverlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: #fffef0; 
+    background-image: 
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E"),
+        linear-gradient(#add8e6 1px, transparent 1px), linear-gradient(90deg, #add8e6 1px, transparent 1px);
+    background-size: auto, 25px 25px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    z-index: 300;
+}
+#mainMenuOverlay img {
+    max-width: 80%; max-height: 50vh; margin-bottom: 20px;
+}
+.main-menu-text {
+    font-family: 'Patrick Hand', cursive; font-size: 50px; font-weight: bold;
+    color: #B45253; cursor: pointer; margin: 10px 0; transition: color 0.2s;
+}
+.main-menu-text:hover {
+    text-decoration: underline; color: #2c3e50;
+}
+
+/* --- README PANEL OVERLAY --- */
+#readmeOverlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: #FBBF24; /* Solid orange-yellow background */
+    display: none; justify-content: center; align-items: center; z-index: 400;
+}
+#readmePanel {
+    background-color: #fffef0;
+    background-image: 
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E"),
+        linear-gradient(#add8e6 1px, transparent 1px), linear-gradient(90deg, #add8e6 1px, transparent 1px);
+    background-size: auto, 25px 25px;
+    border: 5px solid #FCB53B;
+    border-radius: 20px;
+    padding: 40px;
+    width: 85%;
+    max-width: 900px;
+    display: flex;
+    gap: 40px;
+    align-items: flex-start; /* Aligns items to the top so it doesn't look weird if text is short/long */
+    position: relative;
+    box-shadow: 10px 10px 0 rgba(0,0,0,0.2);
+    /* Removed flex-wrap: wrap so they stay strictly side-by-side */
+}
+.readme-slider-wrapper {
+    position: relative;
+    width: 350px;
+    height: 350px;
+    flex-shrink: 0;
+    border-radius: 15px;
+    overflow: hidden;
+    border: 4px dashed #84994F;
+    background-color: #e0f2fe;
+}
+.readme-slider-img {
+    width: 100%; height: 100%; object-fit: cover;
+}
+.readme-slider-btn {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    background: #B45253; color: #fffef0; border: 3px solid #2c3e50;
+    border-radius: 50%; width: 40px; height: 40px;
+    font-family: 'Patrick Hand', cursive; font-size: 24px; font-weight: bold;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.2); transition: transform 0.1s;
+}
+.readme-slider-btn:hover { transform: translateY(-50%) scale(1.1); }
+.readme-slider-btn:active { transform: translateY(-50%) scale(0.9); }
+#readmePrevBtn { left: 10px; }
+#readmeNextBtn { right: 10px; }
+
+.readme-text-content {
+    flex: 1; /* Takes up remaining space perfectly */
+    font-family: 'Patrick Hand', cursive;
+    font-size: 26px; /* Slightly smaller to fit paragraphs cleanly */
+    color: #333;
+    font-weight: bold;
+    line-height: 1.2; /* Tighter line spacing */
+    text-align: left;
+    white-space: pre-wrap; /* Added this so \n shows up as real line breaks! */
+}
+
+#readmeBackBtn {
+    position: absolute;
+    bottom: -25px;
+    right: 30px;
+    background-color: #FCB53B; color: #2c3e50;
+    font-family: 'Patrick Hand', cursive; font-size: 24px; font-weight: bold;
+    padding: 8px 30px; border: 3px solid #2c3e50; border-radius: 12px; cursor: pointer;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.2); transition: transform 0.1s, box-shadow 0.1s;
+}
+#readmeBackBtn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 rgba(0,0,0,0.2); }
+#readmeBackBtn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 rgba(0,0,0,0.2); }

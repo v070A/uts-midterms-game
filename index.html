@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UTS MIDTERMS</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Permanent+Marker&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+    
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <div id="mainMenuOverlay">
+        <img src="assets/images/logo.png" alt="Game Logo">
+        <div id="menuStartText" class="main-menu-text">start</div>
+        <div id="menuReadmeText" class="main-menu-text">readmefirst(pls:vv)</div>
+    </div>
+
+    <div id="readmeOverlay">
+        <div id="readmePanel">
+            <div class="readme-slider-wrapper">
+                <img id="readmeSliderImg" class="readme-slider-img" src="assets/images/creator.png" alt="Slider Image">
+                <button id="readmePrevBtn" class="readme-slider-btn">&lt;</button>
+                <button id="readmeNextBtn" class="readme-slider-btn">&gt;</button>
+            </div>
+            <div class="readme-text-content" id="readmeText"></div>
+            <button id="readmeBackBtn">Back to Menu</button>
+        </div>
+    </div>
+
+    <audio id="bgm" loop><source src="assets/sounds/bgm.mp3" type="audio/mpeg"></audio>
+
+    <div id="gamePanel">
+        <button id="settingsBtn" title="Back to Controls">⚙️</button>
+        <div id="panelHeader">
+            <div id="mascotRow">
+                <div class="mascot-container"><img src="assets/images/me.png" alt="Hungry Caterpillar"></div>
+                <div id="shanDialogue">
+                    <button id="shanDialogueClose">✕</button>
+                    <span class="shan-name">shan:</span>
+                    <span id="shanDialogueText"></span>
+                </div>
+            </div>
+            <h1>shan</h1>
+            <div id="subHeaderText">(alive somewhat)</div>
+        </div>
+        
+        <div id="introBody" class="active-panel">
+            <div class="section">
+                <div class="section-title">Controls</div>
+                <ul>
+                    <li><strong>Rotate:</strong> Arrow Keys <em>or</em> Left Click</li>
+                    <li><strong>Pan:</strong> WASD Keys <em>or</em> Right Click</li>
+                    <li><strong>Zoom:</strong> Q & E Keys <em>or</em> Scroll</li>
+                    <li><strong>Select:</strong> Double Click Objects</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Settings</div>
+                <p>
+                    <label for="bgmVolume" style="font-weight:bold; color:#84994F;">Music Volume: </label>
+                    <input type="range" id="bgmVolume" min="0" max="1" step="0.05" value="0.3" style="width: 150px; cursor: pointer;">
+                </p>
+            </div>
+
+            <div class="section"><div class="section-title">Goal</div><p>Help a caterpillar (shan) transform to a beautiful butterfly, and join her with her journey.</p></div>
+            <div class="ready-section"><div class="ready-text">Are you ready?</div><button id="startBtn" class="action-btn">START</button><button id="resumeBtn" class="action-btn">GO BACK</button></div>
+        </div>
+        
+        <div id="gameBody" class="hidden-panel">
+            <div id="dynamicContent"></div>
+        </div>
+    </div>
+
+    <div id="trackerPanel">
+        <div class="tracker-title">Snack List 🐛</div>
+        <div class="tracker-item" id="track-apple">🍎 Apple <span class="check"></span></div>
+        <div class="tracker-item" id="track-melon">🍈 Melon <span class="check"></span></div>
+        <div class="tracker-item" id="track-banana">🍌 Banana <span class="check"></span></div>
+        <div class="tracker-item" id="track-mango">🥭 Mango <span class="check"></span></div>
+        <div class="tracker-item" id="track-pear">🍐 Pear <span class="check"></span></div>
+    </div>
+
+    <button id="resetCamBtn">🎥 Reset Camera</button>
+
+    <div id="hoverLabel">Object Name</div>
+    <div id="loading">Drawing the room...</div>
+
+    <div id="congratsOverlay">
+        <div id="congratsContainer">
+            <img src="assets/images/butterfly.jpg" alt="Congratulations Image" class="congrats-top-img">
+            <div class="congrats-bottom-board">
+                <div class="congrats-paperclip"></div>
+                <div class="star green">✦</div>
+                <div class="star pink">✦</div>
+                <div class="congrats-title">GAME FINISHED</div>
+                <div class="congrats-subtext">You have help shan turned into a butterfly! When she finally becomes a butterfly, nothing about her is suddenly perfect. She still carries the weight of where she came from. But her wings allow her to move differently now, lighter, steadier, and more aware.
+                    
+                    The change is not about becoming someone new, but about learning to exist as she is. Self acceptance, and love for oneself is what it means to be a butterfly. Thank you for playing!</div>
+                <button id="goodbyeBtn">Goodbye!</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
